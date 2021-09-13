@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_appacademind/providers/badge.dart';
 import 'package:shop_appacademind/providers/cart.dart';
+import 'package:shop_appacademind/providers/product.dart';
 import 'package:shop_appacademind/screens/cart_screen.dart';
 import '../widgets/app_drawer.dart';
 import 'package:shop_appacademind/widgets/products_grid.dart';
@@ -18,15 +19,17 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
+  var _selectOneFavorites = false;
 
   @override
   Widget build(BuildContext context) {
     // final productsProvider = Provider.of<ProductsProvider>(context, listen: false);
+    final product = Provider.of<Product>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Shop_Academind: $_showOnlyFavorites',
+          'Alster.ua',
         ),
         actions: [
           PopupMenuButton(
@@ -39,8 +42,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                   }
                 });
               },
-              icon: Icon(
-                Icons.more_vert,
+              icon: Icon(product.isFavorite ? Icons.favorite :
+                Icons.favorite_border,
               ),
               itemBuilder: (_) => [
                     PopupMenuItem(
