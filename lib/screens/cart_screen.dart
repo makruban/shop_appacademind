@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_appacademind/providers/cart.dart' show Cart;
 import '../widgets/cart_item.dart';
+import '../providers/orders.dart';
 
 class CartScreen extends StatelessWidget {
   static const String routeName = '/card-screen';
@@ -35,7 +36,7 @@ class CartScreen extends StatelessWidget {
                   Spacer(),
                   Chip(
                     label: Text(
-                      '\$${cart.totalAmount}',
+                      '\$${cart.totalAmount.toStringAsFixed(2)}',
                       style: TextStyle(
                         color:
                             Theme.of(context).primaryTextTheme.headline6!.color,
@@ -44,7 +45,13 @@ class CartScreen extends StatelessWidget {
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<Orders>(context, listen: false).addOrder(
+                        cart.itemsCart.values.toList(),
+                        cart.totalAmount,
+                      );
+                      cart.clear();
+                    },
                     child: Text(
                       'ORDER NOW',
                       style: TextStyle(
@@ -52,7 +59,6 @@ class CartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -65,6 +71,7 @@ class CartScreen extends StatelessWidget {
               itemCount: cart.itemsCart.length,
               itemBuilder: (ctx, i) => CartItem(
                 id: cart.itemsCart.values.toList()[i].id,
+                productId: cart.itemsCart.keys.toList()[i],
                 title: cart.itemsCart.values.toList()[i].title,
                 price: cart.itemsCart.values.toList()[i].price,
                 quantity: cart.itemsCart.values.toList()[i].quantity,
