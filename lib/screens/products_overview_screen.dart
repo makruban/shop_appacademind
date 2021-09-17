@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_appacademind/providers/badge.dart';
 import 'package:shop_appacademind/providers/cart.dart';
 import 'package:shop_appacademind/providers/product.dart';
+import 'package:shop_appacademind/providers/products_provider.dart';
 import 'package:shop_appacademind/screens/cart_screen.dart';
 import '../widgets/app_drawer.dart';
 import 'package:shop_appacademind/widgets/products_grid.dart';
@@ -24,7 +25,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     // final productsProvider = Provider.of<ProductsProvider>(context, listen: false);
-    final product = Provider.of<Product>(context, listen: false);
+    // final product = Provider.of<Product>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -32,29 +33,33 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           'Alster.ua',
         ),
         actions: [
-          PopupMenuButton(
-              onSelected: (FilterOption selectedValue) {
-                setState(() {
-                  if (selectedValue == FilterOption.Favorite) {
-                    _showOnlyFavorites = true;
-                  } else {
-                    _showOnlyFavorites = false;
-                  }
-                });
-              },
-              icon: Icon(product.isFavorite ? Icons.favorite :
-                Icons.favorite_border,
-              ),
-              itemBuilder: (_) => [
-                    PopupMenuItem(
-                      child: Text('Only Favorites'),
-                      value: FilterOption.Favorite,
-                    ),
-                    PopupMenuItem(
-                      child: Text('Show All'),
-                      value: FilterOption.All,
-                    ),
-                  ]),
+          Consumer<ProductsProvider>(
+           builder: (_, product, chi) => Badge(
+             value: product.favoriteItems.length.toString(),
+            child: PopupMenuButton(
+                onSelected: (FilterOption selectedValue) {
+                  setState(() {
+                    if (selectedValue == FilterOption.Favorite) {
+                      _showOnlyFavorites = true;
+                    } else {
+                      _showOnlyFavorites = false;
+                    }
+                  });
+                },
+                icon: Icon( product.favoriteItems.length == 0 ?
+                  Icons.favorite_border : Icons.favorite,
+                ),
+                itemBuilder: (_) => [
+                      PopupMenuItem(
+                        child: Text('Only Favorites'),
+                        value: FilterOption.Favorite,
+                      ),
+                      PopupMenuItem(
+                        child: Text('Show All'),
+                        value: FilterOption.All,
+                      ),
+                    ]),),
+          ),
           Consumer<Cart>(
             builder: (_, cart, ch) => Badge(
               child: ch,

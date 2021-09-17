@@ -70,7 +70,7 @@ class ProductsProvider with ChangeNotifier{
     ),
   ];
 
-  // var _showFavoritesOnly = false;
+  // List<Product> _listFavoriteItems = {};
 
   List<Product> get items{
     // if (_showFavoritesOnly){
@@ -93,11 +93,15 @@ class ProductsProvider with ChangeNotifier{
   //   notifyListeners();
   // }
   List<Product> get favoriteItems{
-    return _items.where((prodItem) => prodItem.isFavorite).toList();
+    List<Product> listFavoriteItems = _items.where((prodItem) => prodItem.isFavorite).toList();
+    return listFavoriteItems;
   }
 
   void addProduct(){
     // _items.add(value);
+    notifyListeners();
+  }
+  void getFavoriteCount(){
     notifyListeners();
   }
 }
