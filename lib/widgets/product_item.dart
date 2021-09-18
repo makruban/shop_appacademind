@@ -16,7 +16,8 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
-    final productProvider = Provider.of<ProductsProvider>(context, listen: false);
+    final productProvider =
+        Provider.of<ProductsProvider>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -57,6 +58,18 @@ class ProductItem extends StatelessWidget {
                 product.id,
                 product.price,
                 product.title,
+              );
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text('Товар добавлен в корзину'),
+                    duration: Duration(seconds: 2),
+                    action: SnackBarAction(
+                      label: 'ОТМЕНА',
+                      onPressed: () {
+                        cart.removeSingleItem(product.id);
+                      },
+                    )),
               );
             },
           ),
