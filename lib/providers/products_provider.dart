@@ -71,7 +71,6 @@ class ProductsProvider with ChangeNotifier {
     ),
   ];
 
-  // List<Product> _listFavoriteItems = {};
 
   List<Product> get items {
     // if (_showFavoritesOnly){
@@ -99,9 +98,9 @@ class ProductsProvider with ChangeNotifier {
     return listFavoriteItems;
   }
 
-  void addProduct(Product product) {
-    final url = Uri.parse('https://shop-academind-default-rtdb.firebaseio.com/products.json');
-    http.post(url, body: json.encode(
+  Future<void> addProduct(Product product) {
+    final url = Uri.parse('https://shop-academind-default-rtdb.firebaseio.com/products');
+    return http.post(url, body: json.encode(
       {
         'title': product.title,
         'description': product.description,
@@ -121,6 +120,9 @@ class ProductsProvider with ChangeNotifier {
       _items.add(newProduct);
 
       notifyListeners();
+    }).catchError((error){
+      print(error);
+      throw error;
     });
   }
 
